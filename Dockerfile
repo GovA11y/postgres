@@ -9,8 +9,6 @@ ENV POSTGRES_PASSWORD SuperSecura11y
 ENV POSTGRES_PORT 5432
 ENV TZ	America/New_York
 
-
-
 HEALTHCHECK --interval=2s --timeout=2s --retries=10 CMD pg_isready -U deva11y -h localhost
 STOPSIGNAL SIGINT
 EXPOSE $POSTGRES_PORT
