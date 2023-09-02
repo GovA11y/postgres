@@ -2,15 +2,22 @@
 
 -- Setup Healthcheck user
 CREATE USER healthchecker;
+CREATE USER postgres;
 GRANT CONNECT ON DATABASE hasura TO healthchecker;
 GRANT USAGE ON SCHEMA public TO healthchecker;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO healthchecker;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO healthchecker;
 
 
+-- Setup Bytebase
+CREATE DATABASE bytebase;
+CREATE USER bytebase WITH PASSWORD 'SecretsOfBytebase';
+GRANT ALL PRIVILEGES ON DATABASE bytebase TO bytebase;
+
 
 -- Create a new database named "hasura"
 CREATE DATABASE hasura;
+
 
 -- Create Hasura user
 CREATE USER hasura WITH PASSWORD 'SecretsOfHasura';
@@ -22,6 +29,7 @@ GRANT ALL PRIVILEGES ON DATABASE hasura TO hasura;
 CREATE DATABASE gova11y;
 
 GRANT ALL PRIVILEGES ON DATABASE gova11y TO hasura;
+GRANT ALL PRIVILEGES ON DATABASE gova11y TO bytebase;
 
 -- Toolbox
 CREATE SCHEMA toolbox;
