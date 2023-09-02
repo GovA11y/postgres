@@ -3,7 +3,7 @@
 
 
 -- Setup Healthcheck user
-# CREATE USER postgres;
+CREATE USER postgres;
 
 -- Init Script for GovA11y
 
