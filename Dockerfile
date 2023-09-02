@@ -14,6 +14,6 @@ COPY config/pg_hba.conf /etc/postgresql/
 COPY config/pg_ident.conf /etc/postgresql/
 COPY config/postgresql.conf /etc/postgresql/
 
-HEALTHCHECK --interval=2s --timeout=2s --retries=10 CMD pg_isready -U postgres -h localhost
+HEALTHCHECK --interval=2s --timeout=2s --retries=10 CMD pg_isready -U healthchecker -h localhost
 STOPSIGNAL SIGINT
 EXPOSE $POSTGRES_PORT

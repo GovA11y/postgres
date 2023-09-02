@@ -1,5 +1,14 @@
 -- Init Script for GovA11y
 
+-- Setup Healthcheck user
+CREATE USER healthchecker;
+GRANT CONNECT ON DATABASE hasura TO healthchecker;
+GRANT USAGE ON SCHEMA public TO healthchecker;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO healthchecker;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO healthchecker;
+
+
+
 -- Create a new database named "hasura"
 CREATE DATABASE hasura;
 
@@ -55,6 +64,7 @@ create trigger orgs_update_trigger before
 update
     on
     targets.orgs for each row execute function toolbox.update_updated_at();
+
 
 
 
