@@ -1,33 +1,35 @@
 -- Init Script for GovA11y
 
+
+
+-- Setup Healthcheck user
+# CREATE USER postgres;
+
+-- Init Script for GovA11y
+
 -- Setup Healthcheck user
 CREATE USER healthchecker;
-CREATE USER postgres;
+
+-- Setup Bytebase
+CREATE ROLE bytebase SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN REPLICATION BYPASSRLS PASSWORD 'SecretsOfBytebase';
+CREATE DATABASE bytebase;
+GRANT ALL PRIVILEGES ON DATABASE bytebase TO bytebase;
+
+-- Create a new database named "hasura"
+CREATE DATABASE hasura;
+
+-- Setup permissions for healthchecker on hasura
 GRANT CONNECT ON DATABASE hasura TO healthchecker;
 GRANT USAGE ON SCHEMA public TO healthchecker;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO healthchecker;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO healthchecker;
 
-
--- Setup Bytebase
-CREATE DATABASE bytebase;
-CREATE USER bytebase WITH PASSWORD 'SecretsOfBytebase';
-GRANT ALL PRIVILEGES ON DATABASE bytebase TO bytebase;
-
-
--- Create a new database named "hasura"
-CREATE DATABASE hasura;
-
-
 -- Create Hasura user
 CREATE USER hasura WITH PASSWORD 'SecretsOfHasura';
-
--- Grant all privileges on the "hasura" database to the user "hasura"
 GRANT ALL PRIVILEGES ON DATABASE hasura TO hasura;
 
 -- Create GovA11y
 CREATE DATABASE gova11y;
-
 GRANT ALL PRIVILEGES ON DATABASE gova11y TO hasura;
 GRANT ALL PRIVILEGES ON DATABASE gova11y TO bytebase;
 
