@@ -3,6 +3,8 @@ version: '3.8'
 
 services:
   postgres:
+    container_name: postgres_dev
+    hostname: postgres_dev
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,20 +22,20 @@ services:
       timeout: 2s
       retries: 10
   postgres1:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      environment:
-        POSTGRES_USER:
-        POSTGRES_PASSWORD:
-      ports:
-        - "5433:5432"
-      volumes:
-        - /var/lib/postgresql/data
-        - /etc/postgresql
-      healthcheck:
-        test: ["CMD", "pg_isready", "-U", "healthchecker", "-d", "gova11y", "-h", "localhost"]
-        interval: 2s
-        timeout: 2s
-        retries: 10
+    image: gova11y/postgres:latest
+    container_name: postgres_prod
+    hostname: postgres_prod
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+    ports:
+      - "5433:5432"
+    volumes:
+      - /var/lib/postgresql/data
+      - /etc/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "healthchecker", "-d", "gova11y", "-h", "localhost"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
 
