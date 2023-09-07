@@ -182,8 +182,36 @@ ENV PGDATA /var/lib/postgresql/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
 VOLUME /var/lib/postgresql/data
 
-COPY scripts/docker-entrypoint.sh /usr/local/bin/
+# COPY docker-entrypoint.sh /usr/local/bin/
+# RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# ------------------------------
+# Customs
+# ------------------------------
+# Copy custom configs
+COPY config/pg_hba.conf /etc/postgresql/
+COPY config/pg_ident.conf /etc/postgresql/
+COPY config/postgresql.conf /etc/postgresql/
+
+
+COPY migrate.sh /docker-entrypoint-initdb.d/
+RUN chmod +x /docker-entrypoint-initdb.d/migrate.sh
+
+# Create migrations directory and copy files
+COPY /migrations /docker-entrypoint-initdb.d/migrations/
+
+# RUN mkdir -p /usr/local/bin/migrations/
+# COPY ./migrations/* /usr/local/bin/migrations/
+
+
+#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+
+# Add upstream entrypoint script
+ADD --chmod=0755 \
+	https://github.com/docker-library/postgres/raw/master/16/bullseye/docker-entrypoint.sh \
+	/usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
+
 
 # We set the default STOPSIGNAL to SIGINT, which corresponds to what PostgreSQL
 # calls "Fast Shutdown mode" wherein new connections are disallowed and any
