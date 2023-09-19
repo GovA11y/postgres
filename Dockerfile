@@ -1,8 +1,4 @@
-#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
+
 
 FROM debian:bullseye-slim
 
@@ -84,7 +80,7 @@ RUN set -ex; \
 ENV PG_MAJOR 16
 ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 
-ENV PG_VERSION 16~rc1-1.pgdg110+1
+ENV PG_VERSION 16.0
 
 RUN set -ex; \
 	\
