@@ -80,7 +80,7 @@ RUN set -ex; \
 ENV PG_MAJOR 16
 ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 
-ENV PG_VERSION 16.0
+ENV PG_VERSION 16.0-bullseye
 
 RUN set -ex; \
 	\
