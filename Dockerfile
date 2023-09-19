@@ -199,6 +199,8 @@ RUN chmod +x /docker-entrypoint-initdb.d/migrate.sh
 # Create migrations directory and copy files
 COPY /migrations /docker-entrypoint-initdb.d/migrations/
 
+
+
 # RUN mkdir -p /usr/local/bin/migrations/
 # COPY ./migrations/* /usr/local/bin/migrations/
 
@@ -211,6 +213,9 @@ ADD --chmod=0755 \
 	https://github.com/docker-library/postgres/raw/master/16/bullseye/docker-entrypoint.sh \
 	/usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
+
+HEALTHCHECK --interval=2s --timeout=2s --retries=10 CMD pg_isready -U healthchecker -h localhost -d gova11y
+
 
 
 # We set the default STOPSIGNAL to SIGINT, which corresponds to what PostgreSQL

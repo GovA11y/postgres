@@ -53,6 +53,7 @@ for migration in $(ls $MIGRATIONS_DIR | sort); do
     # Check if the migration has been applied already
     applied=$(psql -tAc "SELECT 1 FROM toolbox.migrations WHERE migration_name='$migration'")
     if [[ "$applied" != "1" ]]; then
+        echo "Processing migration file: $migration"
         psql -a -f "$MIGRATIONS_DIR/$migration"
         if [ $? -ne 0 ]; then
             echo "Error applying migration $migration"
