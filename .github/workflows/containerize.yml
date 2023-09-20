@@ -3,9 +3,7 @@ name: Build and publish 🐳 images
 on:
   push:
 
-
   workflow_dispatch:
-
 
 env:
   GHCR_REGISTRY: ghcr.io
@@ -53,7 +51,6 @@ jobs:
             type=raw,prefix={{branch}}-,value=latest,priority=200,enable=${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
             type=raw,value={{branch}},priority=500
 
-# Caching | https://docs.docker.com/build/ci/github-actions/cache/
       - name: 🏗️📤 Build and push 🐳 image
         uses: docker/build-push-action@v2.7.0
         with:
@@ -61,5 +58,19 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # cache-from: type=gha
-          # cache-to: type=gha,mode=max
+
+  update:
+    name: Update Docker Description
+    runs-on: ubuntu-latest
+    needs:
+      - build-and-push-image
+    steps:
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ env.IMAGE_NAME }}
+          short-description: ${{ github.event.repository.description }}
+          enable-url-completion: true
+          readme-filepath: ./README.md
